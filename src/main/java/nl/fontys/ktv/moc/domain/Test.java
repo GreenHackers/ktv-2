@@ -16,7 +16,8 @@ public class Test {
         IWebservice api = new Api();
         //IWebservice api = new ApiStub();
         try {
-            String jsonData = api.call("/users/current", IWebservice.httpRequestType.GET);
+            String jsonData = api.call("/users/666", IWebservice.httpRequestType.GET);
+            
             System.out.println(jsonData);
         } catch(Exception e) {
             System.out.println(e);
