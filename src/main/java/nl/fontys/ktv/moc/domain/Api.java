@@ -84,8 +84,13 @@ public class Api implements IWebservice {
             builder.append(out);
         }
         
+        // Filename for stub
+        String stubFileName = method.toLowerCase() + "." + httpRequestType.toString().toLowerCase();
+        stubFileName = stubFileName.substring(1); // Skip first slash
+        stubFileName = stubFileName.replace("/", "-");// Replace slashes from method call
+        
         // Write JSON data right into the stub file, for the lazy :-)
-        PrintWriter pw = new PrintWriter("src/main/resources/stubs/" + method.toLowerCase() + "." + httpRequestType.toString().toLowerCase() + ".txt");
+        PrintWriter pw = new PrintWriter("src/main/resources/stubs/" + stubFileName + ".txt");
         pw.write(builder.toString());
         pw.close();
         

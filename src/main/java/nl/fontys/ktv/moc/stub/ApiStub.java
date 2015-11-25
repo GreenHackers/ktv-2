@@ -22,7 +22,13 @@ public class ApiStub implements IWebservice {
 
     @Override
     public String call(String method, httpRequestType httpRequestType) throws UnsupportedEncodingException, IOException, Exception {
-        File file = new File("src/main/resources/stubs/" + method.toLowerCase() + "." + httpRequestType.toString().toLowerCase() + ".txt");
+
+        // Filename for stub
+        String stubFileName = method.toLowerCase() + "." + httpRequestType.toString().toLowerCase();
+        stubFileName = stubFileName.substring(1); // Skip first slash
+        stubFileName = stubFileName.replace("/", "-");// Replace slashes from method call
+
+        File file = new File("src/main/resources/stubs/" + stubFileName + ".txt");
         byte[] encoded = Files.readAllBytes(Paths.get(file.getPath()));
         return new String(encoded, Charset.defaultCharset());
     }

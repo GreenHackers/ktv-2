@@ -1,0 +1,1 @@
+{"username":"admin","password":"admin","fullname":"System Administrator","teamname":"","email":"admin@mok.local","role":"admin","members":[],"node":null,"totalscore":0,"id":"admin"}
