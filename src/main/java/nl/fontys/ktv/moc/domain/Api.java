@@ -8,6 +8,7 @@ package nl.fontys.ktv.moc.domain;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.http.HttpResponse;
@@ -47,6 +48,7 @@ public class Api implements IWebservice {
                     + response.getStatusLine().getStatusCode() + ". Invalid username/password?");
         }
 
+        // Create http request based on the given request type
         HttpRequestBase httpCall = null;
         switch (httpRequestType) {
             case POST:
@@ -63,10 +65,30 @@ public class Api implements IWebservice {
                 break;
         }
 
+        // Execute call to the server
         response = httpClient.execute(httpCall);
 
-        //System.out.println(httpCall);
-        // @TODO Use stub for returning dummy data whlle testing
-        return "json data";
+        // Check if statuscode equals 200 (OK)
+        if (response.getStatusLine().getStatusCode() != 200) {
+            throw new RuntimeException("Failed : HTTP error code : "
+                    + response.getStatusLine().getStatusCode());
+        }
+
+        // Read response and return
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader((response.getEntity().getContent())));
+
+        StringBuilder builder = new StringBuilder();
+        String out = "";
+        while ((out = reader.readLine()) != null) {
+            builder.append(out);
+        }
+        
+        // Write JSON data right into the stub file, for the lazy :-)
+        PrintWriter pw = new PrintWriter("src/main/resources/stubs/" + method.toLowerCase() + "." + httpRequestType.toString().toLowerCase() + ".txt");
+        pw.write(builder.toString());
+        pw.close();
+        
+        return builder.toString();
     }
 }

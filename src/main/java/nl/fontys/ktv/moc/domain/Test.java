@@ -13,8 +13,8 @@ import nl.fontys.ktv.moc.stub.ApiStub;
  */
 public class Test {
     public static void main(String[] args) {
-        //Api api = new Api();
-        IWebservice api = new ApiStub();
+        IWebservice api = new Api();
+        //IWebservice api = new ApiStub();
         try {
             String jsonData = api.call("/competitions", IWebservice.httpRequestType.GET);
             System.out.println(jsonData);
