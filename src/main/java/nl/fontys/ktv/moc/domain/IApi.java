@@ -12,7 +12,7 @@ import java.io.UnsupportedEncodingException;
  *
  * @author Jeroen
  */
-public interface IWebservice {
+public interface IApi {
 
     String apiEndPoint = "";
     String apiAdminUsername = "";
@@ -23,5 +23,5 @@ public interface IWebservice {
         GET, POST, PUT, DELETE
     }
 
-    public String call(String method, IWebservice.httpRequestType httpRequestType) throws UnsupportedEncodingException, IOException, Exception;
+    public String call(String method, IApi.httpRequestType httpRequestType);
 }

@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -27,73 +29,80 @@ import org.apache.http.entity.StringEntity;
  *
  * @author Jeroen van Gijzel
  */
-public class Api implements IWebservice {
+public class Api implements IApi {
 
-    private String apiEndPoint = "http://localhost:8083/api";
-    private String apiAdminUsername = "admin";
-    private String apiAdminPassword = "admin";
+    private final String apiEndPoint = "http://localhost:8083/api";
+    private final String apiAdminUsername = "admin";
+    private final String apiAdminPassword = "admin";
 
     // @TODO accept and process parameters
-    public String call(String method, IWebservice.httpRequestType httpRequestType) throws UnsupportedEncodingException, IOException, Exception {
+    public String call(String method, IApi.httpRequestType httpRequestType) {
 
-        // Create httpClient
-        HttpClient httpClient = HttpClientBuilder.create().build();
+        try {
+            // Create httpClient
+            HttpClient httpClient = HttpClientBuilder.create().build();
 
-        // Authenticate as admin user
-        HttpPost httpPost = new HttpPost(apiEndPoint + "/security");
-        httpPost.setEntity(new StringEntity(apiAdminUsername + ";" + apiAdminPassword));
-        HttpResponse response = httpClient.execute(httpPost);
-        if (response.getStatusLine().getStatusCode() != 204) {
-            throw new RuntimeException("Failed : HTTP error code : "
-                    + response.getStatusLine().getStatusCode() + ". Invalid username/password?");
+            // Authenticate as admin user
+            HttpPost httpPost = new HttpPost(apiEndPoint + "/security");
+            httpPost.setEntity(new StringEntity(apiAdminUsername + ";" + apiAdminPassword));
+            HttpResponse response = httpClient.execute(httpPost);
+            if (response.getStatusLine().getStatusCode() != 204) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + response.getStatusLine().getStatusCode() + ". Invalid username/password?");
+            }
+
+            // Create http request based on the given request type
+            HttpRequestBase httpCall = null;
+            switch (httpRequestType) {
+                case POST:
+                    httpCall = new HttpPost(apiEndPoint + method);
+                    break;
+                case GET:
+                    httpCall = new HttpGet(apiEndPoint + method);
+                    break;
+                case DELETE:
+                    httpCall = new HttpDelete(apiEndPoint + method);
+                    break;
+                case PUT:
+                    httpCall = new HttpPut(apiEndPoint + method);
+                    break;
+            }
+
+            // Execute call to the server
+            response = httpClient.execute(httpCall);
+
+            // Check if statuscode equals 200 (OK)
+            if (response.getStatusLine().getStatusCode() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + response.getStatusLine().getStatusCode());
+            }
+
+            // Read response and return
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader((response.getEntity().getContent())));
+
+            StringBuilder builder = new StringBuilder();
+            String out = "";
+            while ((out = reader.readLine()) != null) {
+                builder.append(out);
+            }
+
+            // Filename for stub
+            String stubFileName = method.toLowerCase() + "." + httpRequestType.toString().toLowerCase();
+            stubFileName = stubFileName.substring(1); // Skip first slash
+            stubFileName = stubFileName.replace("/", "-");// Replace slashes from method call
+
+            // Write JSON data right into the stub file, for the lazy :-)
+            PrintWriter pw = new PrintWriter("src/main/resources/stubs/" + stubFileName + ".txt");
+            pw.write(builder.toString());
+            pw.close();
+
+            return builder.toString();
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        // Create http request based on the given request type
-        HttpRequestBase httpCall = null;
-        switch (httpRequestType) {
-            case POST:
-                httpCall = new HttpPost(apiEndPoint + method);
-                break;
-            case GET:
-                httpCall = new HttpGet(apiEndPoint + method);
-                break;
-            case DELETE:
-                httpCall = new HttpDelete(apiEndPoint + method);
-                break;
-            case PUT:
-                httpCall = new HttpPut(apiEndPoint + method);
-                break;
-        }
-
-        // Execute call to the server
-        response = httpClient.execute(httpCall);
-
-        // Check if statuscode equals 200 (OK)
-        if (response.getStatusLine().getStatusCode() != 200) {
-            throw new RuntimeException("Failed : HTTP error code : "
-                    + response.getStatusLine().getStatusCode());
-        }
-
-        // Read response and return
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader((response.getEntity().getContent())));
-
-        StringBuilder builder = new StringBuilder();
-        String out = "";
-        while ((out = reader.readLine()) != null) {
-            builder.append(out);
-        }
-        
-        // Filename for stub
-        String stubFileName = method.toLowerCase() + "." + httpRequestType.toString().toLowerCase();
-        stubFileName = stubFileName.substring(1); // Skip first slash
-        stubFileName = stubFileName.replace("/", "-");// Replace slashes from method call
-        
-        // Write JSON data right into the stub file, for the lazy :-)
-        PrintWriter pw = new PrintWriter("src/main/resources/stubs/" + stubFileName + ".txt");
-        pw.write(builder.toString());
-        pw.close();
-        
-        return builder.toString();
+        return null;
     }
 }

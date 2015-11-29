@@ -5,6 +5,7 @@
  */
 package nl.fontys.ktv.moc.domain;
 
+import java.util.ArrayList;
 import nl.fontys.ktv.moc.stub.ApiStub;
 
 /**
@@ -12,17 +13,10 @@ import nl.fontys.ktv.moc.stub.ApiStub;
  * @author Jeroen
  */
 public class Test {
+
     public static void main(String[] args) {
-        IWebservice api = new Api();
-        //IWebservice api = new ApiStub();
-        try {
-            String jsonData = api.call("/users/666", IWebservice.httpRequestType.GET);
-            
-            System.out.println(jsonData);
-        } catch(Exception e) {
-            System.out.println(e);
-        }
-        
-        
+
+        Webservice webservice = new Webservice();
+        ArrayList<Assignment> assignments = webservice.getAssignments();
     }
 }

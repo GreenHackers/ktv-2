@@ -18,6 +18,12 @@ public class Assignment {
     private String name;
     private String participantDescription;
     private String spectatorDescription;
+    
+    private String creatorName;
+    private String creatorOrganisation;
+    private String creatorLink;
+    private String apiId; // id used on remote side
+    
     private DifficultyLevel level;
     private ArrayList<Hint> hints;
     
@@ -73,6 +79,62 @@ public class Assignment {
     public void addHint(Hint hint){
         hint.setAssigment(this);
         this.hints.add(hint);
+    }
+
+    /**
+     * @return the creatorName
+     */
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    /**
+     * @param creatorName the creatorName to set
+     */
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
+    /**
+     * @return the creatorOrganisation
+     */
+    public String getCreatorOrganisation() {
+        return creatorOrganisation;
+    }
+
+    /**
+     * @param creatorOrganisation the creatorOrganisation to set
+     */
+    public void setCreatorOrganisation(String creatorOrganisation) {
+        this.creatorOrganisation = creatorOrganisation;
+    }
+
+    /**
+     * @return the creatorLink
+     */
+    public String getCreatorLink() {
+        return creatorLink;
+    }
+
+    /**
+     * @param creatorLink the creatorLink to set
+     */
+    public void setCreatorLink(String creatorLink) {
+        this.creatorLink = creatorLink;
+    }
+
+    /**
+     * @return the apiId
+     */
+    public String getApiId() {
+        return apiId;
+    }
+
+    /**
+     * @param apiId the apiId to set
+     */
+    public void setApiId(String apiId) {
+        this.apiId = apiId;
     }
     
 }

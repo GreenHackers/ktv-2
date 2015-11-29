@@ -15,6 +15,7 @@ public class Hint {
     private Assignment assignment;
     private String text;
     private int time;
+    private String apiId; // id used on remote side
     
     public Hint(){
         this.id += 1;
@@ -46,6 +47,20 @@ public class Hint {
     
     public void setTime(int time){
         this.time = time;
+    }
+
+    /**
+     * @return the apiId
+     */
+    public String getApiId() {
+        return apiId;
+    }
+
+    /**
+     * @param apiId the apiId to set
+     */
+    public void setApiId(String apiId) {
+        this.apiId = apiId;
     }
             
 }
