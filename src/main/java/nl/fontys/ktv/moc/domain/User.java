@@ -18,7 +18,8 @@ public class User {
     private String password;
     private UserRole role;
     private String teamName;
-    
+    private String apiId; // id used on remote side
+
     public User (){
         this.id +=1;
     }
@@ -73,6 +74,20 @@ public class User {
     
     public void setTeamName(String teamName){
         this.teamName= teamName;
+    }
+
+    /**
+     * @return the apiId
+     */
+    public String getApiId() {
+        return apiId;
+    }
+
+    /**
+     * @param apiId the apiId to set
+     */
+    public void setApiId(String apiId) {
+        this.apiId = apiId;
     }
 
 

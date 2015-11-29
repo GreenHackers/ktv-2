@@ -20,6 +20,7 @@ public class Test {
         //ArrayList<Assignment> assignments = webservice.getAssignments();
         //ArrayList<Competition> competitions = webservice.getCompetitions();
         //ArrayList<Score> scores = webservice.getScores();
-        ArrayList<Round> rounds = webservice.getRounds();
+        //ArrayList<Round> rounds = webservice.getRounds();
+        ArrayList<User> users = webservice.getUsers();
     }
 }

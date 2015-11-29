@@ -257,7 +257,7 @@ public class Webservice {
             assignment.setCreatorLink(jsonAssignment.get("creatorLink").toString());
             assignment.setApiId(jsonAssignment.get("id").toString());
 
-                // Process hints
+            // Process hints
             // Loop trough rounds and add them to the competition
             JSONArray hints = new JSONArray(jsonAssignment.get("hints").toString());
             for (int h = 0; h < hints.length(); h++) {
@@ -273,7 +273,7 @@ public class Webservice {
             }
 
             round.setAssignment(assignment);
-            
+
             score.setRound(round);
 
             scores.add(score);
@@ -281,7 +281,7 @@ public class Webservice {
 
         return scores;
     }
-    
+
     /**
      * Retrieve a list of all rounds
      *
@@ -311,7 +311,6 @@ public class Webservice {
             round.setMultiplier(Integer.parseInt(jsonRound.get("multiplier").toString()));
             round.setApiId(jsonRound.get("id").toString());
 
-            
             JSONObject jsonAssignment = jsonRound.getJSONObject("assignment");
 
             // Set assignment on this round
@@ -326,7 +325,7 @@ public class Webservice {
             assignment.setCreatorLink(jsonAssignment.get("creatorLink").toString());
             assignment.setApiId(jsonAssignment.get("id").toString());
 
-                // Process hints
+            // Process hints
             // Loop trough rounds and add them to the competition
             JSONArray hints = new JSONArray(jsonAssignment.get("hints").toString());
             for (int h = 0; h < hints.length(); h++) {
@@ -347,6 +346,50 @@ public class Webservice {
         }
 
         return rounds;
+    }
+
+    /**
+     * Retrieve a list of all users
+     *
+     * @return ArrayList<User>
+     */
+    public ArrayList<User> getUsers() {
+        ArrayList<User> users = new ArrayList<>();
+
+        // Make api call
+        String jsonString = api.call("/users", IApi.httpRequestType.GET);
+
+        // Loop trough the items
+        JSONArray jsonArray = new JSONArray(jsonString);
+        for (int i = 0; i < jsonArray.length(); i++) {
+            // Get object (item)
+            JSONObject jsonUser = jsonArray.getJSONObject(i);
+
+            // Create user
+            User user = new User();
+            user.setUserName(jsonUser.get("username").toString());
+            user.setPassword(jsonUser.get("password").toString());
+            user.setFullName(jsonUser.get("fullname").toString());
+            user.setTeamName(jsonUser.get("teamname").toString());
+            user.setEmail(jsonUser.get("email").toString());
+
+            switch (jsonUser.get("role").toString()) {
+                case "admin":
+                    user.setRole(UserRole.ADMIN);
+                    break;
+                case "guest":
+                    user.setRole(UserRole.GUEST);
+                    break;
+                case "user":
+                    user.setRole(UserRole.USER);
+                    break;
+            }
+            user.setApiId(jsonUser.get("id").toString());
+
+            users.add(user);
+        }
+
+        return users;
     }
 
 }
