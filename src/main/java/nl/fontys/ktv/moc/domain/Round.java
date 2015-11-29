@@ -17,7 +17,8 @@ public class Round {
     private int duration;
     private int multiplier;
     private RoundStatus status;
-            
+    private String apiId; // id used on remote side
+
     public Round(){
         this.id +=1;
     }
@@ -89,5 +90,19 @@ public class Round {
     
     public void addTime(int timeToAdd){
         this.duration += timeToAdd;
+    }
+
+    /**
+     * @return the apiId
+     */
+    public String getApiId() {
+        return apiId;
+    }
+
+    /**
+     * @param apiId the apiId to set
+     */
+    public void setApiId(String apiId) {
+        this.apiId = apiId;
     }
 }

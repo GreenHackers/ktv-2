@@ -19,6 +19,7 @@ public class Competition {
     private ArrayList<Team> teams;
     private ArrayList<Round> rounds;
     private CompetitionStatus status;
+    private String apiId; // id used on remote side
     
     public Competition(){
         this.id += 1;
@@ -92,5 +93,19 @@ public class Competition {
         if(this.status != CompetitionStatus.ENDED) {
             this.status = CompetitionStatus.ENDED;
         }
+    }
+
+    /**
+     * @return the apiId
+     */
+    public String getApiId() {
+        return apiId;
+    }
+
+    /**
+     * @param apiId the apiId to set
+     */
+    public void setApiId(String apiId) {
+        this.apiId = apiId;
     }
 }

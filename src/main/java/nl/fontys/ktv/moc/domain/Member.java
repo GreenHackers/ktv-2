@@ -15,7 +15,8 @@ public class Member {
     private String name;
     private String email;
     private Team team;
-    
+    private String apiId; // id used on remote side
+
     public Member(String name, String email, Team team){
         this.id+=1;
         this.name = name;
@@ -45,5 +46,19 @@ public class Member {
     
     public void setTeam(Team team){
         this.team = team;
+    }
+
+    /**
+     * @return the apiId
+     */
+    public String getApiId() {
+        return apiId;
+    }
+
+    /**
+     * @param apiId the apiId to set
+     */
+    public void setApiId(String apiId) {
+        this.apiId = apiId;
     }
 }
