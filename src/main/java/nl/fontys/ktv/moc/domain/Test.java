@@ -18,6 +18,7 @@ public class Test {
 
         Webservice webservice = new Webservice();
         //ArrayList<Assignment> assignments = webservice.getAssignments();
-        ArrayList<Competition> competitions = webservice.getCompetitions();
+        //ArrayList<Competition> competitions = webservice.getCompetitions();
+        ArrayList<Score> scores = webservice.getScores();
     }
 }

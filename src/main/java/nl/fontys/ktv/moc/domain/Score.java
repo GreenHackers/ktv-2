@@ -15,7 +15,8 @@ public class Score {
     private int score;
     private Round round;
     private Team team;
-    
+    private String apiId; // id used on remote side
+
     public Score()
     {
         this.id += 1;
@@ -47,6 +48,20 @@ public class Score {
 
     public void setScore(int score){
         this.score = score;
+    }
+
+    /**
+     * @return the apiId
+     */
+    public String getApiId() {
+        return apiId;
+    }
+
+    /**
+     * @param apiId the apiId to set
+     */
+    public void setApiId(String apiId) {
+        this.apiId = apiId;
     }
     
 }
