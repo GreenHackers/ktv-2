@@ -392,4 +392,40 @@ public class Webservice {
         return users;
     }
 
+    /**
+     * Retrieve the current user
+     *
+     * @return ArrayList<User>
+     */
+    public User getCurrentUser() {
+        // Make api call
+        String jsonString = api.call("/users/current", IApi.httpRequestType.GET);
+
+        JSONObject jsonUser = new JSONObject(jsonString);
+
+        // Create user
+        User user = new User();
+        user.setUserName(jsonUser.get("username").toString());
+        user.setPassword(jsonUser.get("password").toString());
+        user.setFullName(jsonUser.get("fullname").toString());
+        user.setTeamName(jsonUser.get("teamname").toString());
+        user.setEmail(jsonUser.get("email").toString());
+
+        switch (jsonUser.get("role").toString()) {
+            case "admin":
+                user.setRole(UserRole.ADMIN);
+                break;
+            case "guest":
+                user.setRole(UserRole.GUEST);
+                break;
+            case "user":
+                user.setRole(UserRole.USER);
+                break;
+        }
+        user.setApiId(jsonUser.get("id").toString());
+
+        return user;
+
+    }
+
 }
