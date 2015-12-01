@@ -428,4 +428,28 @@ public class Webservice {
 
     }
 
+    public ArrayList<Team> getTeams() {
+
+        ArrayList<Team> teams = new ArrayList<>();
+        for (User user : this.getUsers()) {
+            if (user.getTeamName().length() > 0) {
+                boolean isNew = true;
+                for (Team t : teams) {
+                    if (t.getName().equals(user.getTeamName())) {
+                        isNew = true;
+                    }
+                }
+                if (isNew == true) {
+                    Team team = new Team();
+                    team.setName(user.getTeamName());
+
+                    teams.add(team);
+                }
+            }
+
+        }
+
+        return teams;
+    }
+
 }

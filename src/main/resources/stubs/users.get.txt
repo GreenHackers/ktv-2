@@ -1,17 +1,1 @@
-[
-	{
-		"username":"admin",
-		"password":"admin",
-		"fullname":"System Administrator",
-		"teamname":"",
-		"email":"admin@mok.local",
-		"role":"admin",
-		"members":
-			[
-			
-			],
-			"node":null,
-			"totalscore":0,
-			"id":"admin"
-		},
-		{"username":"user1","password":"user1","fullname":"User1","teamname":"Team1","email":"user1@mok.local","role":"user1","members":[{"id":666,"team":"user1","membername":"Member2","email":"member2@mok.local"},{"id":667,"team":"user1","membername":"Member1","email":"member1@mok.local"}],"node":null,"totalscore":0,"id":"user1"},{"username":"user2","password":"user2","fullname":"User2","teamname":"Team2","email":"user2@mok.local","role":"user2","members":[{"id":668,"team":"user2","membername":"Member3","email":"member3@mok.local"}],"node":null,"totalscore":0,"id":"user2"},{"username":"user3","password":"user3","fullname":"User3","teamname":"Team3","email":"user3@mok.local","role":"user3","members":[],"node":null,"totalscore":0,"id":"user3"}]
+[{"username":"admin","password":"admin","fullname":"System Administrator","teamname":"","email":"admin@mok.local","role":"admin","members":[],"node":null,"totalscore":0,"id":"admin"},{"username":"user1","password":"user1","fullname":"User1","teamname":"Team1","email":"user1@mok.local","role":"user1","members":[{"id":666,"team":"user1","membername":"Member2","email":"member2@mok.local"},{"id":667,"team":"user1","membername":"Member1","email":"member1@mok.local"}],"node":null,"totalscore":0,"id":"user1"},{"username":"user2","password":"user2","fullname":"User2","teamname":"Team2","email":"user2@mok.local","role":"user2","members":[{"id":668,"team":"user2","membername":"Member3","email":"member3@mok.local"}],"node":null,"totalscore":0,"id":"user2"},{"username":"user3","password":"user3","fullname":"User3","teamname":"Team3","email":"user3@mok.local","role":"user3","members":[],"node":null,"totalscore":0,"id":"user3"},{"username":"guest","password":"guest","fullname":"Guest","teamname":"Masters of Code","email":"guest@mok.local","role":"guest","members":[],"node":null,"totalscore":0,"id":"guest"}]

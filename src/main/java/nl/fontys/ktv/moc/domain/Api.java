@@ -56,6 +56,12 @@ public class Api implements IApi {
             switch (httpRequestType) {
                 case POST:
                     httpCall = new HttpPost(apiEndPoint + method);
+
+                   /*
+                     StringEntity input = new StringEntity("admin;admin"); // = json data
+                    input.setContentType("application/json");
+                     httpCall.setEntity(input);
+                    */
                     break;
                 case GET:
                     httpCall = new HttpGet(apiEndPoint + method);

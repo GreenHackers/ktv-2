@@ -22,6 +22,7 @@ public class Driver {
     private ArrayList<Score> scores;
     private ArrayList<User> users;
     private ArrayList<Team> teams;
+    private final Webservice webservice;
 
     public Driver() {
         assignments = new ArrayList<>();
@@ -31,16 +32,18 @@ public class Driver {
         scores = new ArrayList<>();
         users = new ArrayList<>();
         teams = new ArrayList<>();
+        webservice = new Webservice();
 
     }
 
     /**
      * Returns a list with all asignments
+     *
      * @return list with assignments
      */
     public ArrayList<Assignment> getAssignments() {
-        Webservice webservice = new Webservice();
-        return webservice.getAssignments();
+        assignments = webservice.getAssignments();
+        return assignments;
     }
 
     /**
@@ -103,7 +106,8 @@ public class Driver {
      * @return list with competitions
      */
     public ArrayList<Competition> getCompetitions() {
-        return this.competitions;
+        competitions = webservice.getCompetitions();
+        return competitions;
     }
 
     /**
@@ -272,7 +276,8 @@ public class Driver {
      * @return List with rounds
      */
     public ArrayList<Round> getRounds() {
-        return this.rounds;
+        rounds = webservice.getRounds();
+        return rounds;
     }
 
     /**
@@ -335,7 +340,8 @@ public class Driver {
      * @return list with scores
      */
     public ArrayList<Score> getScores() {
-        return this.scores;
+        scores = webservice.getScores();
+        return scores;
     }
 
     /**
@@ -373,7 +379,8 @@ public class Driver {
      * @return List with users
      */
     public ArrayList<User> getUsers() {
-        return this.users;
+        users = webservice.getUsers();
+        return users;
     }
 
     /**
@@ -438,7 +445,7 @@ public class Driver {
      * @return authenticated user
      */
     public User getCurrentUser() {
-        return null;
+        return webservice.getCurrentUser();
     }
 
     /**
@@ -447,7 +454,8 @@ public class Driver {
      * @return List with teams
      */
     public ArrayList<Team> getTeams() {
-        return this.teams;
+        teams = webservice.getTeams();
+        return teams;
     }
 
     /**
