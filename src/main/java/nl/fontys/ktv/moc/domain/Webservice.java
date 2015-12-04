@@ -574,21 +574,28 @@ public class Webservice {
         return teams;
     }
 
-    public Team createTeam(Team hint) {
+    public Team createTeam(Team team) {
         // @TODO create, set id  and return new object
         // use getTeam();
-        return hint;
+        return team;
     }
 
-    public Team updateTeam(Team hint) {
+    public Team updateTeam(Team team) {
         // @TODO update and return new object
         // use getTeam();
-        return hint;
+        return team;
     }
 
     public Team getTeam(int id) {
         // @TODO retrieve object from webservice
-        return new Team();
+
+        Team team = new Team();
+        team.setName("fontys.ktv");
+        team.setEmail("fontys.ktv@local.nl");
+
+        team.addMember(new Member("Jeroen", "jeroen@local.nl", team));
+        team.addMember(new Member("Johan", "johan@local.nl", team));
+        return team;
     }
 
     public boolean deleteTeam(int id) {
