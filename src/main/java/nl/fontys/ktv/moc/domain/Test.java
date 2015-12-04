@@ -23,6 +23,8 @@ public class Test {
         //ArrayList<Round> rounds = webservice.getRounds();
         //ArrayList<User> users = webservice.getUsers();
         //User user = webservice.getCurrentUser();
-        ArrayList<Team> teams = webservice.getTeams();
+        //ArrayList<Team> teams = webservice.getTeams();
+        
+        
     }
 }

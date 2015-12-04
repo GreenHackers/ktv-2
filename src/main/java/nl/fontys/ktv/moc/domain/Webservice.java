@@ -24,8 +24,11 @@ public class Webservice {
 
     public Webservice() {
         // Create new api client
-        //api = new Api(); // Make use of the LIVE webservice API
-        api = new ApiStub(); // Make use of the STUBBED webservice API
+        api = new Api(); // Default = LIVE webservice API
+    }
+    
+    public Webservice(IApi api) {
+        this.api = api;
     }
 
     /**
