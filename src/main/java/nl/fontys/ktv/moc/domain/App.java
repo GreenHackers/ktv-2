@@ -447,6 +447,14 @@ public class App {
      * * @return new user
      */
     public User createUser(User user) {
+        if (user.getUserName().trim() == "") {
+            throw new IllegalArgumentException("Username cannot be empty.");
+        }
+
+        if (user.getPassword().trim() == "") {
+            throw new IllegalArgumentException("Password cannot be empty.");
+        }
+
         user = webservice.createUser(user);
         if (user != null) {
             this.users.add(user);
@@ -581,7 +589,7 @@ public class App {
                 return true;
             }
         }
-        
+
         return false;
     }
 
