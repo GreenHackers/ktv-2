@@ -204,7 +204,7 @@ public class App {
      * Starts a competition
      */
     public boolean startCompetition(Competition competition) {
-        return webservice.startCompetition();
+        return webservice.startCompetition(competition);
     }
 
     /**
