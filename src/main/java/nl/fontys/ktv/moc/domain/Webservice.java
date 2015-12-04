@@ -79,6 +79,28 @@ public class Webservice {
         return assignments;
     }
 
+    public Assignment createAssignment(Assignment assignment) {
+        // @TODO create, set id  and return new object
+        // use getAssignment();
+        return assignment;
+    }
+
+    public Assignment updateAssignment(Assignment assignment) {
+        // @TODO update and return new object
+        // use getAssignment();
+        return assignment;
+    }
+
+    public Assignment getAssignment(int id) {
+        // @TODO retrieve object from webservice
+        return new Assignment();
+    }
+
+    public boolean deleteAssignment(int id) {
+        // @TODO delete
+        return true;
+    }
+
     /**
      * Retrieve a list of alle competitions
      *
@@ -184,6 +206,40 @@ public class Webservice {
         return competitions;
     }
 
+    public Competition createCompetition(Competition competition) {
+        // @TODO create, set id  and return new object
+        // use getCompetition();
+        return competition;
+    }
+
+    public Competition updateCompetition(Competition competition) {
+        // @TODO update and return new object
+        // use getCompetition();
+        return competition;
+    }
+
+    public Competition getCompetition(int id) {
+        // @TODO retrieve object from webservice
+        return new Competition();
+    }
+
+    public boolean deleteCompetition(int id) {
+        // @TODO delete
+        return true;
+    }
+
+    public Competition getCurrentCompetition() {
+        return new Competition();
+    }
+
+    public boolean startCompetition(Competition competition) {
+        return true;
+    }
+
+    public boolean stopCompetition() {
+        return true;
+    }
+
     /**
      * Retrieve a list of all scores
      *
@@ -282,6 +338,28 @@ public class Webservice {
         return scores;
     }
 
+    public Score createScore(Score score) {
+        // @TODO create, set id  and return new object
+        // use getScore();
+        return score;
+    }
+
+    public Score updateScore(Score score) {
+        // @TODO update and return new object
+        // use getScore();
+        return score;
+    }
+
+    public Score getScore(int id) {
+        // @TODO retrieve object from webservice
+        return new Score();
+    }
+
+    public boolean deleteScore(int id) {
+        // @TODO delete
+        return true;
+    }
+
     /**
      * Retrieve a list of all rounds
      *
@@ -348,6 +426,28 @@ public class Webservice {
         return rounds;
     }
 
+    public Round createRound(Round round) {
+        // @TODO create, set id  and return new object
+        // use getRound();
+        return round;
+    }
+
+    public Round updateRound(Round round) {
+        // @TODO update and return new object
+        // use getRound();
+        return round;
+    }
+
+    public Round getRound(int id) {
+        // @TODO retrieve object from webservice
+        return new Round();
+    }
+
+    public boolean deleteRound(int id) {
+        // @TODO delete
+        return true;
+    }
+
     /**
      * Retrieve a list of all users
      *
@@ -390,6 +490,28 @@ public class Webservice {
         }
 
         return users;
+    }
+
+    public User createUser(User user) {
+        // @TODO create, set id  and return new object
+        // use getUser();
+        return user;
+    }
+
+    public User updateUser(User user) {
+        // @TODO update and return new object
+        // use getUser();
+        return user;
+    }
+
+    public User getUser(int id) {
+        // @TODO retrieve object from webservice
+        return new User();
+    }
+
+    public boolean deleteUser(int id) {
+        // @TODO delete
+        return true;
     }
 
     /**
@@ -452,4 +574,77 @@ public class Webservice {
         return teams;
     }
 
+    public Team createTeam(Team hint) {
+        // @TODO create, set id  and return new object
+        // use getTeam();
+        return hint;
+    }
+
+    public Team updateTeam(Team hint) {
+        // @TODO update and return new object
+        // use getTeam();
+        return hint;
+    }
+
+    public Team getTeam(int id) {
+        // @TODO retrieve object from webservice
+        return new Team();
+    }
+
+    public boolean deleteTeam(int id) {
+        // @TODO delete
+        return true;
+    }
+
+    public Team getCurrentTeam() {
+        User currentUser = getCurrentUser();
+        if (currentUser.getRole() == UserRole.USER) {
+            for (Team team : getTeams()) {
+                if (team.getName().equals(currentUser.getTeamName())) {
+                    return team;
+                }
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Hint> getHints() {
+        ArrayList<Hint> hints = new ArrayList<>();
+
+        return hints;
+    }
+
+    public Hint createHint(Hint hint) {
+        // @TODO create, set id  and return new object
+        // use getHint();
+        return hint;
+    }
+
+    public Hint updateHint(Hint hint) {
+        // @TODO update and return new object
+        // use getHint();
+        return hint;
+    }
+
+    public Hint getHint(int id) {
+        // @TODO retrieve object from webservice
+        return new Hint();
+    }
+
+    public boolean deleteHint(int id) {
+        // @TODO delete
+        return true;
+    }
+
+    public boolean login(String username, String password) {
+        return true;
+    }
+
+    public boolean loginAsGuest() {
+        return true;
+    }
+
+    public boolean logout() {
+        return true;
+    }
 }

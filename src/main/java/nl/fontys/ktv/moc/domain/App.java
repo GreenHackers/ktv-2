@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.fontys.ktv.moc.driver;
+package nl.fontys.ktv.moc.domain;
 
 import java.util.ArrayList;
 import nl.fontys.ktv.moc.domain.*;
@@ -13,7 +13,7 @@ import nl.fontys.ktv.moc.stub.ApiStub;
  *
  * @author Johan
  */
-public class Driver {
+public class App {
 
     private ArrayList<Assignment> assignments;
     private ArrayList<Competition> competitions;
@@ -24,7 +24,7 @@ public class Driver {
     private ArrayList<Team> teams;
     private final Webservice webservice;
 
-    public Driver() {
+    public App() {
         assignments = new ArrayList<>();
         competitions = new ArrayList<>();
         hints = new ArrayList<>();
@@ -48,19 +48,25 @@ public class Driver {
 
     /**
      * Creates as new assignments
+     *
+     * @return Assignment
      */
-    public Assignment createAssignment() {
-        Assignment item = new Assignment();
-        this.assignments.add(item);
-        return item;
+    public Assignment createAssignment(Assignment assignment) {
+        assignment = webservice.createAssignment(assignment);
+        if (assignment != null) {
+            this.assignments.add(assignment);
+        }
+
+        return assignment;
     }
 
     /**
      * Updates a given assignment
      *
      * @param assignment assignment to update
+     * @return boolean
      */
-    public void updateAssignment(Assignment assignment) {
+    public Assignment updateAssignment(Assignment assignment) {
         int index = -1;
         for (Assignment item : assignments) {
             if (item.getId() == assignment.getId()) {
@@ -69,8 +75,14 @@ public class Driver {
             }
         }
         if (index >= 0) {
-            assignments.set(index, assignment);
+            assignment = webservice.updateAssignment(assignment);
+            if (assignment != null) {
+                assignments.set(index, assignment);
+                return assignment;
+            }
         }
+
+        return null;
     }
 
     /**
@@ -80,12 +92,7 @@ public class Driver {
      * @return found competition
      */
     public Assignment getAssignment(int id) {
-        for (Assignment item : assignments) {
-            if (item.getId() == id) {
-                return item;
-            }
-        }
-        return null;
+        return webservice.getAssignment(id);
     }
 
     /**
@@ -93,11 +100,18 @@ public class Driver {
      *
      * @param id of the assignment to delete
      */
-    public void deleteAssignment(int id) {
-        Assignment item = getAssignment(id);
-        if (item != null) {
-            assignments.remove(item);
+    public boolean deleteAssignment(int id) {
+
+        for (Assignment item : assignments) {
+            if (item.getId() == id) {
+                if (webservice.deleteAssignment(id)) {
+                    assignments.remove(item);
+                    return true;
+                }
+            }
         }
+
+        return false;
     }
 
     /**
@@ -113,10 +127,13 @@ public class Driver {
     /**
      * Creates as new competitions
      */
-    public Competition createCompetition() {
-        Competition item = new Competition();
-        this.competitions.add(item);
-        return item;
+    public Competition createCompetition(Competition competition) {
+        competition = webservice.createCompetition(competition);
+        if (competition != null) {
+            this.competitions.add(competition);
+        }
+
+        return competition;
     }
 
     /**
@@ -124,7 +141,7 @@ public class Driver {
      *
      * @param competition competition to update
      */
-    public void updateCompetition(Competition competition) {
+    public Competition updateCompetition(Competition competition) {
         int index = -1;
         for (Competition item : competitions) {
             if (item.getId() == competition.getId()) {
@@ -133,8 +150,16 @@ public class Driver {
             }
         }
         if (index >= 0) {
+            competition = webservice.updateCompetition(competition);
+            if (competition != null) {
+                competitions.set(index, competition);
+                return competition;
+            }
+
             competitions.set(index, competition);
         }
+
+        return null;
     }
 
     /**
@@ -144,12 +169,7 @@ public class Driver {
      * @return found competition
      */
     public Competition getCompetition(int id) {
-        for (Competition item : competitions) {
-            if (item.getId() == id) {
-                return item;
-            }
-        }
-        return null;
+        return webservice.getCompetition(id);
     }
 
     /**
@@ -157,11 +177,18 @@ public class Driver {
      *
      * @param id of the competition to delete
      */
-    public void deleteCompetition(int id) {
-        Competition item = getCompetition(id);
-        if (item != null) {
-            competitions.remove(item);
+    public boolean deleteCompetition(int id) {
+        for (Competition item : competitions) {
+            if (item.getId() == id) {
+                if (webservice.deleteCompetition(id)) {
+                    competitions.remove(item);
+                    return true;
+                }
+            }
         }
+
+        return false;
+
     }
 
     /**
@@ -170,22 +197,22 @@ public class Driver {
      * @return
      */
     public Competition getCurrentCompetition() {
-        return null;
+        return webservice.getCurrentCompetition();
     }
 
     /**
      * Starts a competition
      */
-    public void startCompetition() {
-
+    public boolean startCompetition(Competition competition) {
+        return webservice.startCompetition();
     }
 
     /**
      * Stops the current competition. If a round is started within the current
      * competirtion, it will also be stopped.
      */
-    public void stopCompetition() {
-
+    public boolean stopCompetition() {
+        return webservice.stopCompetition();
     }
 
     /**
@@ -194,16 +221,18 @@ public class Driver {
      * @return List with hints
      */
     public ArrayList<Hint> getHints() {
-        return this.hints;
+        return webservice.getHints();
     }
 
     /**
      * Creates a new hint
      */
-    public Hint createHint() {
-        Hint item = new Hint();
-        this.hints.add(item);
-        return item;
+    public Hint createHint(Hint hint) {
+        hint = webservice.createHint(hint);
+        if (hint != null) {
+            this.hints.add(hint);
+        }
+        return hint;
     }
 
     /**
@@ -211,7 +240,7 @@ public class Driver {
      *
      * @param hint hint to update
      */
-    public void updateHint(Hint hint) {
+    public Hint updateHint(Hint hint) {
         int index = -1;
         for (Hint item : hints) {
             if (item.getId() == hint.getId()) {
@@ -220,8 +249,14 @@ public class Driver {
             }
         }
         if (index >= 0) {
-            hints.set(index, hint);
+            hint = webservice.updateHint(hint);
+            if (hint != null) {
+                hints.set(index, hint);
+                return hint;
+            }
         }
+
+        return null;
     }
 
     /**
@@ -231,12 +266,7 @@ public class Driver {
      * @return found hint
      */
     public Hint getHint(int id) {
-        for (Hint item : hints) {
-            if (item.getId() == id) {
-                return item;
-            }
-        }
-        return null;
+        return webservice.getHint(id);
     }
 
     /**
@@ -244,11 +274,17 @@ public class Driver {
      *
      * @param id of the hint to delete
      */
-    public void deleteHint(int id) {
-        Hint item = getHint(id);
-        if (item != null) {
-            hints.remove(item);
+    public boolean deleteHint(int id) {
+        for (Hint item : hints) {
+            if (item.getId() == id) {
+                if (webservice.deleteHint(id)) {
+                    hints.remove(item);
+                    return true;
+                }
+            }
         }
+
+        return false;
     }
 
     /**
@@ -259,15 +295,22 @@ public class Driver {
      * @param username username for the credentials
      * @param password password for the credentials
      */
-    public void login(String username, String password) {
-
+    public boolean login(String username, String password) {
+        return webservice.login(username, password);
     }
 
     /**
      * Logs in as a guest user. A guest user can see the spectator view.
      */
-    public void loginAsGuest() {
+    public boolean loginAsGuest() {
+        return webservice.loginAsGuest();
+    }
 
+    /**
+     * Log out
+     */
+    public boolean logout() {
+        return webservice.logout();
     }
 
     /**
@@ -283,10 +326,12 @@ public class Driver {
     /**
      * Creates a new round
      */
-    public Round createRound() {
-        Round item = new Round();
-        this.rounds.add(item);
-        return item;
+    public Round createRound(Round round) {
+        round = webservice.createRound(round);
+        if (round != null) {
+            this.rounds.add(round);
+        }
+        return round;
     }
 
     /**
@@ -294,7 +339,7 @@ public class Driver {
      *
      * @param round round to update
      */
-    public void updateRound(Round round) {
+    public Round updateRound(Round round) {
         int index = -1;
         for (Round item : rounds) {
             if (item.getId() == round.getId()) {
@@ -303,8 +348,13 @@ public class Driver {
             }
         }
         if (index >= 0) {
-            rounds.set(index, round);
+            round = webservice.updateRound(round);
+            if (round != null) {
+                rounds.set(index, round);
+                return round;
+            }
         }
+        return null;
     }
 
     /**
@@ -314,12 +364,7 @@ public class Driver {
      * @return found round
      */
     public Round getRound(int id) {
-        for (Round item : rounds) {
-            if (item.getId() == id) {
-                return item;
-            }
-        }
-        return null;
+        return webservice.getRound(id);
     }
 
     /**
@@ -327,11 +372,16 @@ public class Driver {
      *
      * @param id of the round to delete
      */
-    public void deleteRound(int id) {
-        Round item = getRound(id);
-        if (item != null) {
-            rounds.remove(item);
+    public boolean deleteRound(int id) {
+        Round round = getRound(id);
+        if (round != null) {
+            if (webservice.deleteRound(id)) {
+                rounds.remove(round);
+                return true;
+            }
         }
+
+        return false;
     }
 
     /**
@@ -349,10 +399,12 @@ public class Driver {
      *
      * @return new score
      */
-    public Score createScore() {
-        Score item = new Score();
-        this.scores.add(item);
-        return item;
+    public Score createScore(Score score) {
+        score = webservice.createScore(score);
+        if (score != null) {
+            this.scores.add(score);
+        }
+        return score;
     }
 
     /**
@@ -360,7 +412,7 @@ public class Driver {
      *
      * @param score score to update
      */
-    public void updateScore(Score score) {
+    public Score updateScore(Score score) {
         int index = -1;
         for (Score item : scores) {
             if (item.getId() == score.getId()) {
@@ -369,8 +421,14 @@ public class Driver {
             }
         }
         if (index >= 0) {
-            scores.set(index, score);
+            score = webservice.updateScore(score);
+            if (score != null) {
+                scores.set(index, score);
+                return score;
+            }
         }
+
+        return null;
     }
 
     /**
@@ -388,10 +446,12 @@ public class Driver {
      *
      * * @return new user
      */
-    public User createUser() {
-        User item = new User();
-        this.users.add(item);
-        return item;
+    public User createUser(User user) {
+        user = webservice.createUser(user);
+        if (user != null) {
+            this.users.add(user);
+        }
+        return user;
     }
 
     /**
@@ -399,7 +459,7 @@ public class Driver {
      *
      * @param user user to update
      */
-    public void updateUser(User user) {
+    public User updateUser(User user) {
         int index = -1;
         for (User item : users) {
             if (item.getId() == user.getId()) {
@@ -408,8 +468,13 @@ public class Driver {
             }
         }
         if (index >= 0) {
-            users.set(index, user);
+            user = webservice.updateUser(user);
+            if (user != null) {
+                users.set(index, user);
+                return user;
+            }
         }
+        return null;
     }
 
     /**
@@ -419,12 +484,7 @@ public class Driver {
      * @return found user
      */
     public User getUser(int id) {
-        for (User item : users) {
-            if (item.getId() == id) {
-                return item;
-            }
-        }
-        return null;
+        return webservice.getUser(id);
     }
 
     /**
@@ -432,11 +492,16 @@ public class Driver {
      *
      * @param id of the user to delete
      */
-    public void deleteUser(int id) {
-        User item = getUser(id);
-        if (item != null) {
-            users.remove(item);
+    public boolean deleteUser(int id) {
+        User user = getUser(id);
+        if (user != null) {
+            if (webservice.deleteUser(id)) {
+                users.remove(user);
+                return true;
+            }
         }
+
+        return false;
     }
 
     /**
@@ -461,10 +526,12 @@ public class Driver {
     /**
      * Creates a new team
      */
-    public Team createTeam() {
-        Team t = new Team();
-        this.teams.add(t);
-        return t;
+    public Team createTeam(Team team) {
+        team = webservice.createTeam(team);
+        if (team != null) {
+            this.teams.add(team);
+        }
+        return team;
     }
 
     /**
@@ -472,7 +539,7 @@ public class Driver {
      *
      * @param team team to update
      */
-    public void updateTeam(Team team) {
+    public Team updateTeam(Team team) {
         int index = -1;
         for (Team item : teams) {
             if (item.getId() == team.getId()) {
@@ -481,8 +548,14 @@ public class Driver {
             }
         }
         if (index >= 0) {
-            teams.set(index, team);
+            team = webservice.updateTeam(team);
+            if (team != null) {
+                teams.set(index, team);
+                return team;
+            }
         }
+
+        return null;
     }
 
     /**
@@ -492,12 +565,7 @@ public class Driver {
      * @return found team
      */
     public Team getTeam(int id) {
-        for (Team item : teams) {
-            if (item.getId() == id) {
-                return item;
-            }
-        }
-        return null;
+        return webservice.getTeam(id);
     }
 
     /**
@@ -505,11 +573,16 @@ public class Driver {
      *
      * @param id of the team to delete
      */
-    public void deleteTeam(int id) {
-        Team item = getTeam(id);
-        if (item != null) {
-            teams.remove(item);
+    public boolean deleteTeam(int id) {
+        Team team = getTeam(id);
+        if (team != null) {
+            if (webservice.deleteTeam(id)) {
+                teams.remove(team);
+                return true;
+            }
         }
+        
+        return false;
     }
 
     /**
@@ -518,7 +591,7 @@ public class Driver {
      * @return authenticated team
      */
     public Team getCurrentTeam() {
-        return null;
+        return webservice.getCurrentTeam();
     }
 
 }
