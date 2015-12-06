@@ -16,7 +16,7 @@ public class Test {
 
     public static void main(String[] args) {
 
-        Webservice webservice = new Webservice();
+        App app = new App();
         //ArrayList<Assignment> assignments = webservice.getAssignments();
         //ArrayList<Competition> competitions = webservice.getCompetitions();
         //ArrayList<Score> scores = webservice.getScores();
@@ -24,7 +24,16 @@ public class Test {
         //ArrayList<User> users = webservice.getUsers();
         //User user = webservice.getCurrentUser();
         //ArrayList<Team> teams = webservice.getTeams();
+        User user = new User();
+        user.setFullName("Jeroen van Gijzel");
+        user.setEmail("jeroenvangijzel@gmail.com");
+        user.setRole(UserRole.USER);
+        user.setTeamName("Fontys");
+        user.setUserName("jeroen");
+        user.setPassword("geheim");
+
+        user = app.createUser(user);
         
-        
+
     }
 }

@@ -496,6 +496,9 @@ public class Webservice {
     }
 
     public User createUser(User user) {
+        String json = "{\"username\":\"Jeroen\",\"password\":\"Jeroen\",\"fullname\":\"Jeroen\",\"teamname\":\"\",\"email\":\"jeroenvangijzel@gmail.com\",\"role\":\"user1\",\"members\":[],\"node\":null,\"totalscore\":5,\"id\":\"jeroen\"}";
+        
+        api.call("/users", IApi.httpRequestType.POST, json);
         // @TODO create, set id  and return new object
         // use getUser();
         return user;

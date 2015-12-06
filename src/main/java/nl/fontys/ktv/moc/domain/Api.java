@@ -35,8 +35,14 @@ public class Api implements IApi {
     private final String apiAdminUsername = "admin";
     private final String apiAdminPassword = "admin";
 
-    // @TODO accept and process parameters
+    @Override
     public String call(String method, IApi.httpRequestType httpRequestType) {
+        // Method is called without json input, call real method with an empty string.
+        return call(method, httpRequestType, "");
+    }
+
+    // @TODO accept and process parameters
+    public String call(String method, IApi.httpRequestType httpRequestType, String jsonInput) {
 
         try {
             // Create httpClient
@@ -52,30 +58,41 @@ public class Api implements IApi {
             }
 
             // Create http request based on the given request type
-            HttpRequestBase httpCall = null;
             switch (httpRequestType) {
                 case POST:
-                    httpCall = new HttpPost(apiEndPoint + method);
+                    HttpPost httpPostCall = new HttpPost(apiEndPoint + method);
 
-                   /*
-                     StringEntity input = new StringEntity("admin;admin"); // = json data
-                    input.setContentType("application/json");
-                     httpCall.setEntity(input);
-                    */
+                    StringEntity inputPost = new StringEntity(jsonInput);
+                    inputPost.setContentType("application/json");
+                    httpPostCall.setEntity(inputPost);
+
+                    // Execute call to the server
+                    response = httpClient.execute(httpPostCall);
+
                     break;
                 case GET:
-                    httpCall = new HttpGet(apiEndPoint + method);
+                    HttpGet httpGetCall = new HttpGet(apiEndPoint + method);
+
+                    // Execute call to the server
+                    response = httpClient.execute(httpGetCall);
                     break;
                 case DELETE:
-                    httpCall = new HttpDelete(apiEndPoint + method);
+                    HttpDelete httpDeleteCall = new HttpDelete(apiEndPoint + method);
+
+                    // Execute call to the server
+                    response = httpClient.execute(httpDeleteCall);
                     break;
                 case PUT:
-                    httpCall = new HttpPut(apiEndPoint + method);
+                    HttpPut httpPutCall = new HttpPut(apiEndPoint + method);
+
+                    StringEntity inputPut = new StringEntity(jsonInput);
+                    inputPut.setContentType("application/json");
+                    httpPutCall.setEntity(inputPut);
+
+                    // Execute call to the server
+                    response = httpClient.execute(httpPutCall);
                     break;
             }
-
-            // Execute call to the server
-            response = httpClient.execute(httpCall);
 
             // Check if statuscode equals 200 (OK)
             if (response.getStatusLine().getStatusCode() != 200) {

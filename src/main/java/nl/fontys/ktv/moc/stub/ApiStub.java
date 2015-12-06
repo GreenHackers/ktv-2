@@ -21,7 +21,13 @@ import nl.fontys.ktv.moc.domain.IApi;
 public class ApiStub implements IApi {
 
     @Override
-    public String call(String method, httpRequestType httpRequestType) {
+    public String call(String method, IApi.httpRequestType httpRequestType) {
+        // Method is called without json input, call real method with an empty string.
+        return call(method, httpRequestType, "");
+    }
+
+    @Override
+    public String call(String method, httpRequestType httpRequestType, String jsonInput) {
         try {
             // Filename for stub
             String stubFileName = method.toLowerCase() + "." + httpRequestType.toString().toLowerCase();
