@@ -33,9 +33,20 @@ public class App {
         users = new ArrayList<>();
         teams = new ArrayList<>();
         webservice = new Webservice();
-        //webservice = new Webservice(new ApiStub());
-
     }
+    
+    public App(IApi api) {
+        assignments = new ArrayList<>();
+        competitions = new ArrayList<>();
+        hints = new ArrayList<>();
+        rounds = new ArrayList<>();
+        scores = new ArrayList<>();
+        users = new ArrayList<>();
+        teams = new ArrayList<>();
+        webservice = new Webservice(api);
+    }
+    
+    
 
     /**
      * Returns a list with all asignments
