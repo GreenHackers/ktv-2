@@ -41,6 +41,8 @@ public class Webservice {
 
         // Make api call
         String jsonString = api.call("/assignments", IApi.httpRequestType.GET);
+        if(jsonString == null)
+            return assignments;
 
         // Loop trough the items
         JSONArray jsonArray = new JSONArray(jsonString);
@@ -114,7 +116,9 @@ public class Webservice {
 
         // Make api call
         String jsonString = api.call("/competitions", IApi.httpRequestType.GET);
-
+        if(jsonString == null)
+            return competitions;
+        
         // Loop trough the items
         JSONArray jsonArray = new JSONArray(jsonString);
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -253,7 +257,9 @@ public class Webservice {
 
         // Make api call
         String jsonString = api.call("/scores", IApi.httpRequestType.GET);
-
+        if(jsonString == null)
+            return scores;
+        
         // Loop trough the items
         JSONArray jsonScores = new JSONArray(jsonString);
         for (int s = 0; s < jsonScores.length(); s++) {
@@ -373,7 +379,9 @@ public class Webservice {
 
         // Make api call
         String jsonString = api.call("/rounds", IApi.httpRequestType.GET);
-
+        if(jsonString == null)
+            return rounds;
+        
         // Loop trough the items
         JSONArray jsonArray = new JSONArray(jsonString);
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -461,7 +469,9 @@ public class Webservice {
 
         // Make api call
         String jsonString = api.call("/users", IApi.httpRequestType.GET);
-
+        if(jsonString == null)
+            return users;
+        
         // Loop trough the items
         JSONArray jsonArray = new JSONArray(jsonString);
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -530,6 +540,8 @@ public class Webservice {
         String jsonString = api.call("/users/current", IApi.httpRequestType.GET);
 
         JSONObject jsonUser = new JSONObject(jsonString);
+        if(jsonString == null)
+            return null;
 
         // Create user
         User user = new User();

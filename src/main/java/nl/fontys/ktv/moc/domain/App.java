@@ -22,20 +22,19 @@ public class App {
     private ArrayList<Score> scores;
     private ArrayList<User> users;
     private ArrayList<Team> teams;
-    private final Webservice webservice;
+    private Webservice webservice = null;
 
     public App() {
-        assignments = new ArrayList<>();
-        competitions = new ArrayList<>();
-        hints = new ArrayList<>();
-        rounds = new ArrayList<>();
-        scores = new ArrayList<>();
-        users = new ArrayList<>();
-        teams = new ArrayList<>();
+        init();
         webservice = new Webservice();
     }
-    
+
     public App(IApi api) {
+        init();
+        webservice = new Webservice(api);
+    }
+
+    private void init() {
         assignments = new ArrayList<>();
         competitions = new ArrayList<>();
         hints = new ArrayList<>();
@@ -43,10 +42,7 @@ public class App {
         scores = new ArrayList<>();
         users = new ArrayList<>();
         teams = new ArrayList<>();
-        webservice = new Webservice(api);
     }
-    
-    
 
     /**
      * Returns a list with all asignments

@@ -31,14 +31,15 @@ import org.apache.http.entity.StringEntity;
  */
 public class Api implements IApi {
 
-    private final String apiEndPoint = "http://localhost:8083/api";
+    //private final String apiEndPoint = "http://localhost:8083/api";
+    private final String apiEndPoint = "http://192.168.202.128:8083/api";
     private final String apiAdminUsername = "admin";
     private final String apiAdminPassword = "admin";
 
     @Override
     public String call(String method, IApi.httpRequestType httpRequestType) {
         // Method is called without json input, call real method with an empty string.
-        return call(method, httpRequestType, "");
+        return call(method, httpRequestType, null);
     }
 
     // @TODO accept and process parameters
@@ -110,16 +111,17 @@ public class Api implements IApi {
                 builder.append(out);
             }
 
-            // Filename for stub
-            String stubFileName = method.toLowerCase() + "." + httpRequestType.toString().toLowerCase();
-            stubFileName = stubFileName.substring(1); // Skip first slash
-            stubFileName = stubFileName.replace("/", "-");// Replace slashes from method call
+            /*
+             // Filename for stub
+             String stubFileName = method.toLowerCase() + "." + httpRequestType.toString().toLowerCase();
+             stubFileName = stubFileName.substring(1); // Skip first slash
+             stubFileName = stubFileName.replace("/", "-");// Replace slashes from method call
 
-            // Write JSON data right into the stub file, for the lazy :-)
-            PrintWriter pw = new PrintWriter("src/main/resources/stubs/" + stubFileName + ".txt");
-            pw.write(builder.toString());
-            pw.close();
-
+             // Write JSON data right into the stub file, for the lazy :-)
+             PrintWriter pw = new PrintWriter("src/main/resources/stubs/" + stubFileName + ".txt");
+             pw.write(builder.toString());
+             pw.close();
+             */
             return builder.toString();
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
