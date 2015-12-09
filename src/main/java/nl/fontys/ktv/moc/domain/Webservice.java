@@ -506,9 +506,21 @@ public class Webservice {
     }
 
     public User createUser(User user) {
-        String json = "{\"username\":\"Jeroen\",\"password\":\"Jeroen\",\"fullname\":\"Jeroen\",\"teamname\":\"\",\"email\":\"jeroenvangijzel@gmail.com\",\"role\":\"user1\",\"members\":[],\"node\":null,\"totalscore\":5,\"id\":\"jeroen\"}";
-        
-        api.call("/users", IApi.httpRequestType.POST, json);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("username", user.getUserName());
+        jsonObject.put("password", user.getPassword());
+        jsonObject.put("fullname", user.getFullName());
+        jsonObject.put("teamname", user.getTeamName());
+        jsonObject.put("email", user.getEmail());
+        jsonObject.put("role", user.getRole());// Implementeren toString?
+        //jsonObject.put("members", user.getEmail());
+        //jsonObject.put("node", user.getEmail());
+        //jsonObject.put("totalscore", user.getEmail());
+        //jsonObject.put("id", user.getApiId()); // For update
+        String json = jsonObject.toString();
+
+        String jsonUser = api.call("/users", IApi.httpRequestType.POST, json, "application/json");
+        //System.out.println(jsonUser);
         // @TODO create, set id  and return new object
         // use getUser();
         return user;

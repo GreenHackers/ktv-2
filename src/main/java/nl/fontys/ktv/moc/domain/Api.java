@@ -39,11 +39,11 @@ public class Api implements IApi {
     @Override
     public String call(String method, IApi.httpRequestType httpRequestType) {
         // Method is called without json input, call real method with an empty string.
-        return call(method, httpRequestType, null);
+        return call(method, httpRequestType, null, null);
     }
 
     // @TODO accept and process parameters
-    public String call(String method, IApi.httpRequestType httpRequestType, String jsonInput) {
+    public String call(String method, IApi.httpRequestType httpRequestType, String jsonInput, String contentType) {
 
         try {
             // Create httpClient
@@ -63,9 +63,13 @@ public class Api implements IApi {
                 case POST:
                     HttpPost httpPostCall = new HttpPost(apiEndPoint + method);
 
-                    StringEntity inputPost = new StringEntity(jsonInput);
-                    inputPost.setContentType("application/json");
-                    httpPostCall.setEntity(inputPost);
+                    if (jsonInput != null) {
+                        StringEntity inputPost = new StringEntity(jsonInput);
+                        if (contentType != null) {
+                            inputPost.setContentType(contentType);
+                        }
+                        httpPostCall.setEntity(inputPost);
+                    }
 
                     // Execute call to the server
                     response = httpClient.execute(httpPostCall);
@@ -86,10 +90,15 @@ public class Api implements IApi {
                 case PUT:
                     HttpPut httpPutCall = new HttpPut(apiEndPoint + method);
 
-                    StringEntity inputPut = new StringEntity(jsonInput);
-                    inputPut.setContentType("application/json");
-                    httpPutCall.setEntity(inputPut);
-
+                    if (jsonInput != null) {
+                        StringEntity inputPut = new StringEntity(jsonInput);
+                        if (contentType != null) {
+                            inputPut.setContentType(contentType);
+                        }
+                        inputPut.setContentType("application/json");
+                        httpPutCall.setEntity(inputPut);
+                    }
+                    
                     // Execute call to the server
                     response = httpClient.execute(httpPutCall);
                     break;
@@ -127,6 +136,8 @@ public class Api implements IApi {
             Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(RuntimeException ex) {
+             Logger.getLogger(Api.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

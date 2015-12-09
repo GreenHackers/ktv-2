@@ -23,11 +23,11 @@ public class ApiStub implements IApi {
     @Override
     public String call(String method, IApi.httpRequestType httpRequestType) {
         // Method is called without json input, call real method with an empty string.
-        return call(method, httpRequestType, "");
+        return call(method, httpRequestType, null, null);
     }
 
     @Override
-    public String call(String method, httpRequestType httpRequestType, String jsonInput) {
+    public String call(String method, httpRequestType httpRequestType, String jsonInput, String contentType) {
         try {
             // Filename for stub
             String stubFileName = method.toLowerCase() + "." + httpRequestType.toString().toLowerCase();

@@ -24,6 +24,6 @@ public interface IApi {
     }
 
     public String call(String method, IApi.httpRequestType httpRequestType);
-    public String call(String method, IApi.httpRequestType httpRequestType, String json);
+    public String call(String method, IApi.httpRequestType httpRequestType, String json, String contentType);
 
 }
