@@ -31,8 +31,8 @@ import org.apache.http.entity.StringEntity;
  */
 public class Api implements IApi {
 
-    //private final String apiEndPoint = "http://localhost:8083/api";
-    private final String apiEndPoint = "http://192.168.202.128:8083/api";
+    private final String apiEndPoint = "http://localhost:8083/api";
+    //private final String apiEndPoint = "http://192.168.202.128:8083/api";
     private final String apiAdminUsername = "admin";
     private final String apiAdminPassword = "admin";
 
@@ -55,7 +55,7 @@ public class Api implements IApi {
             HttpResponse response = httpClient.execute(httpPost);
             if (response.getStatusLine().getStatusCode() != 204) {
                 throw new RuntimeException("Failed : HTTP error code : "
-                        + response.getStatusLine().getStatusCode() + ". Invalid username/password?");
+                        + response.getStatusLine().getStatusCode() + ". Webservice unavailable? Invalid username/password?");
             }
 
             // Create http request based on the given request type

@@ -90,5 +90,8 @@ public class User {
         this.apiId = apiId;
     }
 
+    public String toString() {
+        return "userName: " + userName;
+    }
 
 }

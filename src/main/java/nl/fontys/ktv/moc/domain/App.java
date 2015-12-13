@@ -7,6 +7,7 @@ package nl.fontys.ktv.moc.domain;
 
 import java.util.ArrayList;
 import nl.fontys.ktv.moc.domain.*;
+import nl.fontys.ktv.moc.domain.exceptions.UserException;
 import nl.fontys.ktv.moc.stub.ApiStub;
 
 /**
@@ -446,6 +447,8 @@ public class App {
      */
     public ArrayList<User> getUsers() {
         users = webservice.getUsers();
+        System.out.println("getUsers");
+        System.out.println(users);
         return users;
     }
 
@@ -454,13 +457,18 @@ public class App {
      *
      * * @return new user
      */
-    public User createUser(User user) {
+    public User createUser(User user) throws UserException {
         if (user.getUserName().trim() == "") {
             throw new IllegalArgumentException("Username cannot be empty.");
         }
 
         if (user.getPassword().trim() == "") {
             throw new IllegalArgumentException("Password cannot be empty.");
+        }
+        
+                // Username must be unique
+        if (this.findUserByUsername(user.getUserName()) == null) {
+            throw new UserException("A user with the same username already exists");
         }
 
         user = webservice.createUser(user);
@@ -527,6 +535,20 @@ public class App {
      */
     public User getCurrentUser() {
         return webservice.getCurrentUser();
+    }
+    
+    
+    public User findUserByUsername(String username) {
+        User foundUser = null;
+
+        for (User user : this.getUsers()) {
+            if (user.getUserName().equals(username)) {
+                System.out.println("findUserByUsername FOUND");
+                return user;
+            }
+        }
+        System.out.println("findUserByUsername NOT FOUND");
+        return foundUser;
     }
 
     /**

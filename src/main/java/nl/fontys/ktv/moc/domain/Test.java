@@ -10,6 +10,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import nl.fontys.ktv.moc.domain.exceptions.UserException;
 import nl.fontys.ktv.moc.stub.ApiStub;
 
 /**
@@ -28,18 +31,32 @@ public class Test {
         //ArrayList<User> users = webservice.getUsers();
         //User user = webservice.getCurrentUser();
         //ArrayList<Team> teams = webservice.getTeams();
-        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss", Locale.US).format(new Date());
 
         User user = new User();
-        user.setFullName("Jeroen van Gijzel - " + timeStamp);
-        user.setEmail("jeroenvangijzel@gmail.com-" + timeStamp);
+        user.setFullName("Jeroen van Gijzel");
+        user.setEmail("jeroenvangijzel@gmail.com");
         user.setRole(UserRole.USER);
-        user.setTeamName("Fontys-" + timeStamp);
-        user.setUserName("jeroen-" + timeStamp);
-        user.setPassword("geheim-" + timeStamp);
+        user.setTeamName("Fontys");
+        user.setUserName("bert");
+        user.setPassword("geheim");
 
-        user = app.createUser(user);
-        
-
+        try {
+            user = app.createUser(user);
+            System.out.println("User created.");
+        } catch (UserException ex) {
+            System.out.println("User NOT created.");
+            System.out.println(ex);
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+        }
+/*
+        try {
+            user = app.createUser(user);
+            System.out.println("User created.");
+        } catch (UserException ex) {
+            System.out.println("User NOT created.");
+            System.out.println(ex);
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+        }
+*/
     }
 }

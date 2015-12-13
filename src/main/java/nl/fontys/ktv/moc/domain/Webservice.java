@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import nl.fontys.ktv.moc.stub.ApiStub;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import nl.fontys.ktv.moc.domain.exceptions.UserException;
 
 /**
  * This class makes requests to IApi and converts the results (JSON) to usable
@@ -26,7 +27,7 @@ public class Webservice {
         // Create new api client
         api = new Api(); // Default = LIVE webservice API
     }
-    
+
     public Webservice(IApi api) {
         this.api = api;
     }
@@ -41,8 +42,9 @@ public class Webservice {
 
         // Make api call
         String jsonString = api.call("/assignments", IApi.httpRequestType.GET);
-        if(jsonString == null)
+        if (jsonString == null) {
             return assignments;
+        }
 
         // Loop trough the items
         JSONArray jsonArray = new JSONArray(jsonString);
@@ -116,9 +118,10 @@ public class Webservice {
 
         // Make api call
         String jsonString = api.call("/competitions", IApi.httpRequestType.GET);
-        if(jsonString == null)
+        if (jsonString == null) {
             return competitions;
-        
+        }
+
         // Loop trough the items
         JSONArray jsonArray = new JSONArray(jsonString);
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -257,9 +260,10 @@ public class Webservice {
 
         // Make api call
         String jsonString = api.call("/scores", IApi.httpRequestType.GET);
-        if(jsonString == null)
+        if (jsonString == null) {
             return scores;
-        
+        }
+
         // Loop trough the items
         JSONArray jsonScores = new JSONArray(jsonString);
         for (int s = 0; s < jsonScores.length(); s++) {
@@ -379,9 +383,10 @@ public class Webservice {
 
         // Make api call
         String jsonString = api.call("/rounds", IApi.httpRequestType.GET);
-        if(jsonString == null)
+        if (jsonString == null) {
             return rounds;
-        
+        }
+
         // Loop trough the items
         JSONArray jsonArray = new JSONArray(jsonString);
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -469,9 +474,10 @@ public class Webservice {
 
         // Make api call
         String jsonString = api.call("/users", IApi.httpRequestType.GET);
-        if(jsonString == null)
+        if (jsonString == null) {
             return users;
-        
+        }
+
         // Loop trough the items
         JSONArray jsonArray = new JSONArray(jsonString);
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -506,6 +512,7 @@ public class Webservice {
     }
 
     public User createUser(User user) {
+        // Create json object from given data
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("username", user.getUserName());
         jsonObject.put("password", user.getPassword());
@@ -517,9 +524,9 @@ public class Webservice {
         //jsonObject.put("node", user.getEmail());
         //jsonObject.put("totalscore", user.getEmail());
         //jsonObject.put("id", user.getApiId()); // For update
-        String json = jsonObject.toString();
 
-        String jsonUser = api.call("/users", IApi.httpRequestType.POST, json, "application/json");
+        // Make api call
+        String jsonUser = api.call("/users", IApi.httpRequestType.POST, jsonObject.toString(), "application/json");
         //System.out.println(jsonUser);
         // @TODO create, set id  and return new object
         // use getUser();
@@ -552,8 +559,9 @@ public class Webservice {
         String jsonString = api.call("/users/current", IApi.httpRequestType.GET);
 
         JSONObject jsonUser = new JSONObject(jsonString);
-        if(jsonString == null)
+        if (jsonString == null) {
             return null;
+        }
 
         // Create user
         User user = new User();

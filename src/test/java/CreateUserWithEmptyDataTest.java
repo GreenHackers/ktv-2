@@ -4,8 +4,11 @@
  * and open the template in the editor.
  */
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import nl.fontys.ktv.moc.domain.App;
 import nl.fontys.ktv.moc.domain.User;
+import nl.fontys.ktv.moc.domain.exceptions.UserException;
 import nl.fontys.ktv.moc.stub.ApiStub;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -64,6 +67,8 @@ public class CreateUserWithEmptyDataTest {
             fail("Excpected IllegalArgumentException");
         } catch(IllegalArgumentException e) {
             
+        } catch (UserException ex) {
+            Logger.getLogger(CreateUserWithEmptyDataTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
