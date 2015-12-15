@@ -484,7 +484,7 @@ public class App {
      *
      * @param user user to update
      */
-    public User updateUser(User user) {
+    public User updateUser(User user) throws UserException {
         int index = -1;
         for (User item : users) {
             if (item.getId() == user.getId()) {
@@ -493,6 +493,14 @@ public class App {
             }
         }
         if (index >= 0) {
+            if ("".equals(user.getUserName().trim())) {
+                throw new IllegalArgumentException("Username cannot be empty.");
+            }
+
+            if ("".equals(user.getPassword().trim())) {
+                throw new IllegalArgumentException("Password cannot be empty.");
+            }
+
             user = webservice.updateUser(user);
             if (user != null) {
                 users.set(index, user);
@@ -508,7 +516,7 @@ public class App {
      * @param id of the user to find
      * @return found user
      */
-    public User getUser(int id) {
+    public User getUser(String id) {
         return webservice.getUser(id);
     }
 
@@ -517,7 +525,7 @@ public class App {
      *
      * @param id of the user to delete
      */
-    public boolean deleteUser(int id) {
+    public boolean deleteUser(String id) {
         User user = getUser(id);
         if (user != null) {
             if (webservice.deleteUser(id)) {

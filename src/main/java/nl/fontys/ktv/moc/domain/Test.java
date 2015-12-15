@@ -32,22 +32,8 @@ public class Test {
         //User user = webservice.getCurrentUser();
         //ArrayList<Team> teams = webservice.getTeams();
 
-        User user = new User();
-        user.setFullName("Jeroen van Gijzel");
-        user.setEmail("jeroenvangijzel@gmail.com");
-        user.setRole(UserRole.USER);
-        user.setTeamName("aaaaaaa");
-        user.setUserName("aaaaaaa");
-        user.setPassword("geheim");
-
-        try {
-            user = app.createUser(user);
-            System.out.println(user);
-            System.out.println("User created.");
-        } catch (UserException ex) {
-            System.out.println("User NOT created.");
-            System.out.println(ex);
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        User user = app.getCurrentUser();
+        System.out.println("getCurrentUser");
+        System.out.println(user);
     }
 }

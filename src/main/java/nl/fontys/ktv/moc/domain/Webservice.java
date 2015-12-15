@@ -516,39 +516,84 @@ public class Webservice {
         jsonObject.put("teamname", user.getTeamName());
         jsonObject.put("email", user.getEmail());
         jsonObject.put("role", user.getRole());// Implementeren toString?
-        //jsonObject.put("members", user.getEmail());
-        //jsonObject.put("node", user.getEmail());
-        //jsonObject.put("totalscore", user.getEmail());
-        //jsonObject.put("id", user.getApiId()); // For update
 
-        System.out.println(jsonObject.toString());
         // Make api call
         String jsonString = api.call("/users", IApi.httpRequestType.POST, jsonObject.toString(), "application/json");
         JSONObject jsonUser = new JSONObject(jsonString);
         if (jsonUser == null || (!jsonUser.isNull("error") && jsonUser.get("error").toString().equals("true"))) {
             return user;
         }
-        
+
         // Set ApiId
         user.setApiId(jsonUser.get("id").toString());
-        
+
         // use getUser();
         return user;
     }
 
+    /**
+     *
+     * @param user
+     * @return User user on success | null on error
+     */
     public User updateUser(User user) {
-        // @TODO update and return new object
-        // use getUser();
+        // Create json object from given data
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("username", user.getUserName());
+        jsonObject.put("password", user.getPassword());
+        jsonObject.put("fullname", user.getFullName());
+        jsonObject.put("teamname", user.getTeamName());
+        jsonObject.put("email", user.getEmail());
+        jsonObject.put("role", user.getRole());
+        jsonObject.put("id", user.getApiId());
+
+        // Make api call
+        String jsonString = api.call("/users", IApi.httpRequestType.PUT, jsonObject.toString(), "application/json");
+        JSONObject jsonUser = new JSONObject(jsonString);
+        if (jsonUser == null || (!jsonUser.isNull("error") && jsonUser.get("error").toString().equals("true"))) {
+            return null;
+        }
+
+        // Update ApiId (this happens when the username is cahnged).
+        user.setApiId(jsonUser.get("id").toString());
+
         return user;
     }
 
-    public User getUser(int id) {
-        // @TODO retrieve object from webservice
-        return new User();
+    public User getUser(String id) {
+        // Make api call
+        String jsonString = api.call("/users/" + id, IApi.httpRequestType.GET, null, "text/plain");
+        JSONObject jsonUser = new JSONObject(jsonString);
+        if (jsonUser == null || (!jsonUser.isNull("error") && jsonUser.get("error").toString().equals("true"))) {
+            return null;
+        }
+        User user = new User();
+        user.setUserName(jsonUser.get("username").toString());
+        user.setPassword(jsonUser.get("password").toString());
+        user.setFullName(jsonUser.get("fullname").toString());
+        user.setTeamName(jsonUser.get("teamname").toString());
+        user.setEmail(jsonUser.get("email").toString());
+
+        switch (jsonUser.get("role").toString()) {
+            case "admin":
+                user.setRole(UserRole.ADMIN);
+                break;
+            case "guest":
+                user.setRole(UserRole.GUEST);
+                break;
+            case "user":
+                user.setRole(UserRole.USER);
+                break;
+        }
+        user.setApiId(jsonUser.get("id").toString());
+
+        return user;
     }
 
-    public boolean deleteUser(int id) {
-        // @TODO delete
+    public boolean deleteUser(String id) {
+        // Make api call
+        String jsonString = api.call("/users/" + id, IApi.httpRequestType.DELETE, null, "text/plain");
+        
         return true;
     }
 

@@ -104,6 +104,11 @@ public class Api implements IApi {
                     break;
             }
 
+            // If statuscode equeals 204 it also seems OK, except for the fact that there is no content
+            if (response.getStatusLine().getStatusCode() == 204) {
+                return null;
+            }
+            
             // Check if statuscode equals 200 (OK)
             if (response.getStatusLine().getStatusCode() != 200) {
                 String error = "{'error':true,'statusCode':" + response.getStatusLine().getStatusCode() + '}';
@@ -112,6 +117,8 @@ public class Api implements IApi {
                 throw new RuntimeException("Failed : HTTP error code : "
                         + response.getStatusLine().getStatusCode());
             }
+            
+            
 
             // Read response and return
             BufferedReader reader = new BufferedReader(
