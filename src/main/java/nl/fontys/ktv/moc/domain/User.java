@@ -18,7 +18,7 @@ public class User {
     private String password;
     private UserRole role;
     private String teamName;
-    private String apiId; // id used on remote side
+    private String apiId = null; // id used on remote side
 
     public User (){
         this.id +=1;
@@ -91,7 +91,7 @@ public class User {
     }
 
     public String toString() {
-        return "userName: " + userName;
+        return "userName: " + userName + ", apiId: " + apiId;
     }
 
 }

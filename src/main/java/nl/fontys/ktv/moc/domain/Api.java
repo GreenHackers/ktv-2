@@ -106,6 +106,9 @@ public class Api implements IApi {
 
             // Check if statuscode equals 200 (OK)
             if (response.getStatusLine().getStatusCode() != 200) {
+                String error = "{'error':true,'statusCode':" + response.getStatusLine().getStatusCode() + '}';
+                
+                
                 throw new RuntimeException("Failed : HTTP error code : "
                         + response.getStatusLine().getStatusCode());
             }

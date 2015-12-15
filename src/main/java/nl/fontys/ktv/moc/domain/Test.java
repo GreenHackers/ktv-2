@@ -36,27 +36,18 @@ public class Test {
         user.setFullName("Jeroen van Gijzel");
         user.setEmail("jeroenvangijzel@gmail.com");
         user.setRole(UserRole.USER);
-        user.setTeamName("Fontys");
-        user.setUserName("bert");
+        user.setTeamName("aaaaaaa");
+        user.setUserName("aaaaaaa");
         user.setPassword("geheim");
 
         try {
             user = app.createUser(user);
+            System.out.println(user);
             System.out.println("User created.");
         } catch (UserException ex) {
             System.out.println("User NOT created.");
             System.out.println(ex);
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
         }
-/*
-        try {
-            user = app.createUser(user);
-            System.out.println("User created.");
-        } catch (UserException ex) {
-            System.out.println("User NOT created.");
-            System.out.println(ex);
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-        }
-*/
     }
 }

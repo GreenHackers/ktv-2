@@ -5,13 +5,9 @@
  */
 package nl.fontys.ktv.moc.domain;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
-import nl.fontys.ktv.moc.stub.ApiStub;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import nl.fontys.ktv.moc.domain.exceptions.UserException;
 
 /**
  * This class makes requests to IApi and converts the results (JSON) to usable
@@ -525,10 +521,17 @@ public class Webservice {
         //jsonObject.put("totalscore", user.getEmail());
         //jsonObject.put("id", user.getApiId()); // For update
 
+        System.out.println(jsonObject.toString());
         // Make api call
-        String jsonUser = api.call("/users", IApi.httpRequestType.POST, jsonObject.toString(), "application/json");
-        //System.out.println(jsonUser);
-        // @TODO create, set id  and return new object
+        String jsonString = api.call("/users", IApi.httpRequestType.POST, jsonObject.toString(), "application/json");
+        JSONObject jsonUser = new JSONObject(jsonString);
+        if (jsonUser == null || (!jsonUser.isNull("error") && jsonUser.get("error").toString().equals("true"))) {
+            return user;
+        }
+        
+        // Set ApiId
+        user.setApiId(jsonUser.get("id").toString());
+        
         // use getUser();
         return user;
     }
@@ -559,7 +562,7 @@ public class Webservice {
         String jsonString = api.call("/users/current", IApi.httpRequestType.GET);
 
         JSONObject jsonUser = new JSONObject(jsonString);
-        if (jsonString == null) {
+        if (jsonUser == null) {
             return null;
         }
 
