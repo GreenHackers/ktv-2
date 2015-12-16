@@ -26,23 +26,24 @@ public class App {
     private Webservice webservice = null;
 
     public App() {
-        init();
         webservice = new Webservice();
+        init();
     }
 
     public App(IApi api) {
-        init();
         webservice = new Webservice(api);
+        init();
     }
 
     private void init() {
-        assignments = new ArrayList<>();
-        competitions = new ArrayList<>();
-        hints = new ArrayList<>();
-        rounds = new ArrayList<>();
-        scores = new ArrayList<>();
-        users = new ArrayList<>();
-        teams = new ArrayList<>();
+        // Initially retrieve all list so we can execute functions like delete / update
+        assignments = webservice.getAssignments();
+        competitions = webservice.getCompetitions();
+        hints = webservice.getHints();
+        rounds = webservice.getRounds();
+        scores = webservice.getScores();
+        users = webservice.getUsers();
+        teams = webservice.getTeams();
     }
 
     /**
@@ -100,7 +101,7 @@ public class App {
      * @param id of the competition to find
      * @return found competition
      */
-    public Assignment getAssignment(int id) {
+    public Assignment getAssignment(String id) {
         return webservice.getAssignment(id);
     }
 
@@ -109,10 +110,10 @@ public class App {
      *
      * @param id of the assignment to delete
      */
-    public boolean deleteAssignment(int id) {
+    public boolean deleteAssignment(String id) {
 
         for (Assignment item : assignments) {
-            if (item.getId() == id) {
+            if (item.getApiId().equals(id)) {
                 if (webservice.deleteAssignment(id)) {
                     assignments.remove(item);
                     return true;
@@ -186,9 +187,9 @@ public class App {
      *
      * @param id of the competition to delete
      */
-    public boolean deleteCompetition(int id) {
+    public boolean deleteCompetition(String id) {
         for (Competition item : competitions) {
-            if (item.getId() == id) {
+            if (item.getApiId().equals(id)) {
                 if (webservice.deleteCompetition(id)) {
                     competitions.remove(item);
                     return true;
@@ -283,9 +284,9 @@ public class App {
      *
      * @param id of the hint to delete
      */
-    public boolean deleteHint(int id) {
+    public boolean deleteHint(String id) {
         for (Hint item : hints) {
-            if (item.getId() == id) {
+            if (item.getApiId().equals(id)) {
                 if (webservice.deleteHint(id)) {
                     hints.remove(item);
                     return true;
@@ -372,7 +373,7 @@ public class App {
      * @param id of the round to find
      * @return found round
      */
-    public Round getRound(int id) {
+    public Round getRound(String id) {
         return webservice.getRound(id);
     }
 
@@ -381,7 +382,7 @@ public class App {
      *
      * @param id of the round to delete
      */
-    public boolean deleteRound(int id) {
+    public boolean deleteRound(String id) {
         Round round = getRound(id);
         if (round != null) {
             if (webservice.deleteRound(id)) {

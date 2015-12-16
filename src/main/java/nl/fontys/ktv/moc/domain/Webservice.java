@@ -94,13 +94,47 @@ public class Webservice {
         return assignment;
     }
 
-    public Assignment getAssignment(int id) {
-        // @TODO retrieve object from webservice
-        return new Assignment();
+    public Assignment getAssignment(String id) {
+        // Make api call
+        String jsonString = api.call("/assignments/" + id, IApi.httpRequestType.GET, null, "text/plain");
+        JSONObject jsonAssignment = new JSONObject(jsonString);
+        if (jsonAssignment == null || (!jsonAssignment.isNull("error") && jsonAssignment.get("error").toString().equals("true"))) {
+            return null;
+        }
+
+        Assignment assignment = new Assignment();
+
+        // Set data on assignment
+        assignment.setArtifact(jsonAssignment.get("artifact").toString());
+        assignment.setName(jsonAssignment.get("name").toString());
+        assignment.setParticipantDescription(jsonAssignment.get("participantDescription").toString());
+        assignment.setCreatorName(jsonAssignment.get("creatorName").toString());
+        assignment.setCreatorOrganisation(jsonAssignment.get("creatorOrganisation").toString());
+        assignment.setCreatorLink(jsonAssignment.get("creatorLink").toString());
+        assignment.setApiId(jsonAssignment.get("id").toString());
+
+        // Loop trough hints and add them to the assignment
+        JSONArray hints = new JSONArray(jsonAssignment.get("hints").toString());
+        for (int h = 0; h < hints.length(); h++) {
+            JSONObject jsonHint = hints.getJSONObject(h);
+            //System.out.println(jsonHint);
+
+            Hint hint = new Hint();
+            hint.setAssigment(assignment); // @TODO, is deze niet dubbelop?
+            hint.setText(jsonHint.get("text").toString());
+            hint.setTime(Integer.parseInt(jsonHint.get("time").toString()));
+            hint.setApiId(jsonHint.get("id").toString());
+
+            assignment.addHint(hint);
+        }
+
+        return assignment;
+
     }
 
-    public boolean deleteAssignment(int id) {
-        // @TODO delete
+    public boolean deleteAssignment(String id) {
+        // Make api call
+        String jsonString = api.call("/assignments/" + id, IApi.httpRequestType.DELETE, null, "text/plain");
         return true;
     }
 
@@ -225,12 +259,99 @@ public class Webservice {
     }
 
     public Competition getCompetition(int id) {
-        // @TODO retrieve object from webservice
-        return new Competition();
+        // Make api call
+        String jsonString = api.call("/competitions/" + id, IApi.httpRequestType.GET, null, "text/plain");
+        JSONObject jsonCompetition = new JSONObject(jsonString);
+        if (jsonCompetition == null || (!jsonCompetition.isNull("error") && jsonCompetition.get("error").toString().equals("true"))) {
+            return null;
+        }
+
+        Competition competition = new Competition();
+        competition.setTitle(jsonCompetition.get("title").toString());
+        competition.setDescription(jsonCompetition.get("description").toString());
+        competition.setApiId(jsonCompetition.get("id").toString());
+
+        // Loop trough teams and add them to the competition
+        JSONArray teams = new JSONArray(jsonCompetition.get("teams").toString());
+        for (int t = 0; t < teams.length(); t++) {
+            JSONObject jsonTeam = teams.getJSONObject(t);
+                //System.out.println(jsonHint);
+
+            // @TODO, niet gebruikte variabelen uit de JSON: node:null, username, password, fullname, role
+            Team team = new Team();
+            team.setName(jsonTeam.get("teamname").toString());
+            team.setEmail(jsonTeam.get("email").toString());
+            team.setTotalscore(Integer.parseInt(jsonTeam.get("totalscore").toString()));
+            team.setApiId(jsonTeam.get("id").toString());
+
+            // Process team members
+            // Loop trough team members and add them to the team
+            JSONArray members = new JSONArray(jsonTeam.get("members").toString());
+            for (int m = 0; m < members.length(); m++) {
+                JSONObject jsonMember = members.getJSONObject(m);
+
+                Member member = new Member(jsonMember.get("membername").toString(), jsonMember.get("email").toString(), team);
+                member.setApiId(jsonMember.get("id").toString());
+
+                team.addMember(member);
+            }
+
+            competition.addTeam(team);
+        }
+
+        // Loop trough rounds and add them to the competition
+        JSONArray rounds = new JSONArray(jsonCompetition.get("rounds").toString());
+        for (int r = 0; r < rounds.length(); r++) {
+            JSONObject jsonRound = rounds.getJSONObject(r);
+            //System.out.println(jsonHint);
+
+            Round round = new Round();
+            round.setCompetition(competition);
+            round.setDuration(Integer.parseInt(jsonRound.get("duration").toString()));
+            round.setMultiplier(Integer.parseInt(jsonRound.get("multiplier").toString()));
+            round.setApiId(jsonRound.get("id").toString());
+
+            JSONObject jsonAssignment = jsonRound.getJSONObject("assignment");
+
+            // Set assignment on this round
+            Assignment assignment = new Assignment();
+
+            // Set data on assignment
+            assignment.setArtifact(jsonAssignment.get("artifact").toString());
+            assignment.setName(jsonAssignment.get("name").toString());
+            assignment.setParticipantDescription(jsonAssignment.get("participantDescription").toString());
+            assignment.setCreatorName(jsonAssignment.get("creatorName").toString());
+            assignment.setCreatorOrganisation(jsonAssignment.get("creatorOrganisation").toString());
+            assignment.setCreatorLink(jsonAssignment.get("creatorLink").toString());
+            assignment.setApiId(jsonAssignment.get("id").toString());
+
+            // Process hints
+            // Loop trough rounds and add them to the competition
+            JSONArray hints = new JSONArray(jsonAssignment.get("hints").toString());
+            for (int h = 0; h < hints.length(); h++) {
+                JSONObject jsonHint = hints.getJSONObject(h);
+
+                Hint hint = new Hint();
+                hint.setAssigment(assignment); // @TODO, is deze niet dubbelop?
+                hint.setText(jsonHint.get("text").toString());
+                hint.setTime(Integer.parseInt(jsonHint.get("time").toString()));
+                hint.setApiId(jsonHint.get("id").toString());
+
+                assignment.addHint(hint);
+            }
+
+            round.setAssignment(assignment);
+
+            competition.addRound(round);
+        }
+
+        return competition;
     }
 
-    public boolean deleteCompetition(int id) {
-        // @TODO delete
+    public boolean deleteCompetition(String id) {
+        System.out.println("Delete competition");
+        // Make api call
+        String jsonString = api.call("/competitions/" + id, IApi.httpRequestType.DELETE, null, "text/plain");
         return true;
     }
 
@@ -439,8 +560,24 @@ public class Webservice {
     }
 
     public Round createRound(Round round) {
-        // @TODO create, set id  and return new object
-        // use getRound();
+        // Create json object from given data
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("competition", round.getCompetition());
+        jsonObject.put("duration", round.getDuration());
+        jsonObject.put("multiplier", round.getMultiplier());
+        jsonObject.put("assignment", round.getAssignment());
+
+        // Make api call
+        String jsonString = api.call("/rounds", IApi.httpRequestType.POST, jsonObject.toString(), "application/json");
+        JSONObject jsonRound = new JSONObject(jsonString);
+        if (jsonRound == null || (!jsonRound.isNull("error") && jsonRound.get("error").toString().equals("true"))) {
+            return round;
+        }
+
+        // Set ApiId
+        round.setApiId(jsonRound.get("id").toString());
+
+        // use getUser();
         return round;
     }
 
@@ -450,13 +587,62 @@ public class Webservice {
         return round;
     }
 
-    public Round getRound(int id) {
-        // @TODO retrieve object from webservice
-        return new Round();
+    public Round getRound(String id) {
+        // Make api call
+        String jsonString = api.call("/rounds/" + id, IApi.httpRequestType.GET, null, "text/plain");
+        JSONObject jsonRound = new JSONObject(jsonString);
+        if (jsonRound == null || (!jsonRound.isNull("error") && jsonRound.get("error").toString().equals("true"))) {
+            return null;
+        }
+
+        // Create round
+        Round round = new Round();
+
+        // Create competition @TODO title and description are missing at this point.
+        Competition competition = new Competition();
+        competition.setApiId(jsonRound.get("competition").toString());
+        round.setCompetition(competition);
+        round.setDuration(Integer.parseInt(jsonRound.get("duration").toString()));
+        round.setMultiplier(Integer.parseInt(jsonRound.get("multiplier").toString()));
+        round.setApiId(jsonRound.get("id").toString());
+
+        JSONObject jsonAssignment = jsonRound.getJSONObject("assignment");
+
+        // Set assignment on this round
+        Assignment assignment = new Assignment();
+
+        // Set data on assignment
+        assignment.setArtifact(jsonAssignment.get("artifact").toString());
+        assignment.setName(jsonAssignment.get("name").toString());
+        assignment.setParticipantDescription(jsonAssignment.get("participantDescription").toString());
+        assignment.setCreatorName(jsonAssignment.get("creatorName").toString());
+        assignment.setCreatorOrganisation(jsonAssignment.get("creatorOrganisation").toString());
+        assignment.setCreatorLink(jsonAssignment.get("creatorLink").toString());
+        assignment.setApiId(jsonAssignment.get("id").toString());
+
+            // Process hints
+        // Loop trough rounds and add them to the competition
+        JSONArray hints = new JSONArray(jsonAssignment.get("hints").toString());
+        for (int h = 0; h < hints.length(); h++) {
+            JSONObject jsonHint = hints.getJSONObject(h);
+
+            Hint hint = new Hint();
+            hint.setAssigment(assignment); // @TODO, is deze niet dubbelop?
+            hint.setText(jsonHint.get("text").toString());
+            hint.setTime(Integer.parseInt(jsonHint.get("time").toString()));
+            hint.setApiId(jsonHint.get("id").toString());
+
+            assignment.addHint(hint);
+        }
+
+        round.setAssignment(assignment);
+
+        return round;
     }
 
-    public boolean deleteRound(int id) {
-        // @TODO delete
+    public boolean deleteRound(String id) {
+        // Make api call
+        String jsonString = api.call("/rounds/" + id, IApi.httpRequestType.DELETE, null, "text/plain");
         return true;
     }
 
@@ -593,7 +779,6 @@ public class Webservice {
     public boolean deleteUser(String id) {
         // Make api call
         String jsonString = api.call("/users/" + id, IApi.httpRequestType.DELETE, null, "text/plain");
-        
         return true;
     }
 
@@ -724,7 +909,7 @@ public class Webservice {
         return new Hint();
     }
 
-    public boolean deleteHint(int id) {
+    public boolean deleteHint(String id) {
         // @TODO delete
         return true;
     }

@@ -32,8 +32,24 @@ public class Test {
         //User user = webservice.getCurrentUser();
         //ArrayList<Team> teams = webservice.getTeams();
 
-        User user = app.getCurrentUser();
-        System.out.println("getCurrentUser");
-        System.out.println(user);
+        //Competition competition = app.getCompetition(997);
+        //Assignment assignment = app.getAssignment("TestArtifact2");
+        //Round round = app.getRound("888");
+        //System.out.println("round");
+        //System.out.println(round);
+        app.getCompetitions();
+        app.deleteCompetition("998");
+
+        /*        
+         Round round = new Round();
+         round.setCompetition(competition);
+         round.setDuration(3333);
+         round.setMultiplier(6666);
+         round.setAssignment(assignment);
+
+         round = app.createRound(round);
+         System.out.println("round");
+         System.out.println(round);
+         */
     }
 }
